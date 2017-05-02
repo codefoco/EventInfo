@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Facebook Event Info</title>
+        <link rel="icon" href="favicon.ico">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    </head>
+
+    
+    <body>
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9&appId=145580775584194";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+      </script>
+      <div class="container">
+          <div class="page-header">
+            <h2>Facebook Event Info</h2>
+            <div class="navbar navbar-default">
+              <div class="navbar-header">
+                  </span>&nbsp;</span>
+                  <img class="navbar-brand" id="logged_user_image" style="display:none;" src="favicon.ico"></img>
+                  <p class="navbar-text" id="logged_user" style="display:none;" ><strong>User</strong></p>
+                  <div class="fb-login-button navbar-btn" data-max-rows="1" data-size="medium" onlogin="checkLoginState();" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false"></div>
+                   </div>
+              </div>
+          </div>
+          <div class="alert alert-danger" role="alert" id="error" style="display:none;">Error: You must be signed to use this tool</div>
+          
+          <form action="#" onsubmit="onProcess();">
+              <label for="event-url">Facebook Event URL</label>
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon glyphicon-link"></span>&nbsp;</span>
+                <input type="text" class="form-control" id="event-url" aria-describedby="basic-addon1" placeholder="Event URL or Event ID">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-stats"></span>&nbsp;</button>
+                </span>
+              </div>
+          </form>
+          <div class="bs-example" > 
+            <div class="row"> 
+              <div class="col-sm-6"> 
+                  <div id="going_chart" ></div>
+              </div>
+              <div class="col-sm-6"> 
+                  <div id="interested_chart" ></div>
+              </div>
+            </div>
+          </div>
+      </div><!-- /.container -->
+    
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="http://spin.js.org/spin.min.js"></script>
+    <script src="scripts/jpconversion.js" charset="UTF-8"></script>
+    <script src="scripts/getnameinfo.js" charset="UTF-8"></script>
+    <script src="scripts/eventinfo.js" charset="UTF-8"></script>
+    <script src="scripts/eventinfo.ui.js" charset="UTF-8"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        google.charts.load('current', {'packages':['corechart']});
+        $.getScript('//connect.facebook.net/en_US/sdk.js', function(){
+          FB.init({ appId: '145580775584194', version: 'v2.9' });
+              checkLoginState ();
+          });
+      });
+    </script>
+    </body>
+</html>
