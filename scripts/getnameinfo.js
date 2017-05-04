@@ -512,11 +512,35 @@ var nippo_sufixes =
             ]
 
 var forbidden_nippo_parts = [
-                'l',
-                'era',
+                'amara',
+                'amaro',
+                'bueno',
+                'capita',
+                'cecato',
+                'cucca',
+                'deoda',
+                'deodo',
+                'demuci',
+                'dona',
+                'douro',
                 'eira',
-                'ero',
                 'eiro',
+                'era',
+                'ero',
+                'gama',
+                'gennari',
+                'l',
+                'mansa',
+                'massa',
+                'menossi',
+                'moreno',
+                'sacco',
+                'sando',
+                'simao',
+                'tassin',
+                'tenor',
+                'zabeo',
+                'zora',
 ];
 
 var forbidden_nippo_firstletter = [
@@ -566,6 +590,7 @@ var ehKorean = function(name) {
 var ehChinese = function(name) {
 
     var common_chinese = [
+                'li',
                 'lee',
                 'liau',
                 'liu',

@@ -5,6 +5,7 @@
                   $("#error").hide();
               });
       }
+
       function hideUserInfo ()
       {
            $("#logged_user").hide();
@@ -41,6 +42,8 @@
 
       function onFetchEventInfo ()
       {
+          var max_going = 4000;
+          var max_interested = 1000;
           var event = $("#event-url").val();
           var rx = /facebook\.com\/events\/(\d+)/ig;
           var rx2 = /(\d+)/ig;
@@ -54,6 +57,7 @@
           }
 
           cleanError();
+
           var eventid = result [1];
 
           var info_going = {
@@ -73,31 +77,57 @@
                 chart_id: 'interested_chart',
                 chart_title: 'Interested'
            };
+        
+          drawChart (info_going);
+          drawChart (info_interested);
 
-          FB.api(
-            '/' + eventid,
+          $('#charts').spin();
+
+          fetchMoreAttendingParticipants (eventid, info_going, null,'attending', max_going) ;
+          fetchMoreAttendingParticipants (eventid, info_interested,null, 'interested', max_interested);
+      }
+
+      function fetchMoreAttendingParticipants (eventid, info, cursor, type, max)
+      {
+            var fields = {"fields":"name,link", "limit":"475", "pretty":"0" };
+            if (cursor)
+                fields.after = cursor;
+            FB.api(
+            '/' + eventid + '/' + type,
             'GET',
-            {"fields":"attending_count,interested_count,attending.limit(450){link,name,picture},interested.limit(450)"},
-            function(response) {
+            fields,
+                function (response) {
 
-                if (!response) {
-                    error ("Error retrieving Event info from Facebook");
-                    return;
-                }
-                if (response.error)
-                {
-                    error ("Error retrieving Event info from Facebook: " + response.error.message);
-                    return;
-                }
+                        if (!response) {
+                            error ("Error retrieving Event info from Facebook");
+                            return;
+                        }
+                        if (response.error)
+                        {
+                            error ("Error retrieving Event info from Facebook: " + response.error.message);
+                            return;
+                        }
 
-                cleanError();
+                        if (!cursor)
+                            $('#charts').spin(false);
+                            
+                        getEventInfoFromParticipants (response.data, info);
 
-                getEventInfo (response, info_going, info_interested);
+                        if (response.paging && response.paging.next)
+                            cursor = response.paging.cursors.after;
+                        else
+                            cursor = null;
 
-                drawChart (info_going);
-                drawChart (info_interested);
-            }
-          );
+                        drawChart (info);
+
+                        var total = info.asian_female_count + info.non_asian_female_count + info.asian_male_count + info.non_asian_male_count;
+                        
+                        if (total > max)
+                            return;
+                        
+                        if (cursor)
+                            setTimeout( function () { fetchMoreAttendingParticipants (eventid, info, cursor, type, max)}, 510);
+                });
       }
 
       function error (message)
@@ -116,16 +146,19 @@
         ]);
 
         var total = info.asian_female_count + info.non_asian_female_count + info.asian_male_count + info.non_asian_male_count;
-        if (total == 0)
+        var chart = new google.visualization.PieChart(document.getElementById(info.chart_id));
+        if (total == 0) {
+            chart.draw(data);
             return;
+        }
 
         var male = info.asian_male_count + info.non_asian_male_count;
         var female = info.asian_female_count + info.non_asian_female_count;
 
         var options = {
           title: info.chart_title + " Sample: " + total + "\nM: " + male + " ("+ Math.round(100*male/total) + "%)" + " F: " + female + " ("+ Math.round(100*female/total) + "%)"
+          ,colors: ['#ed1c24', '#9e0b0f', '#448ccb', '#0054a6' ]
         };
 
-        var chart = new google.visualization.PieChart(document.getElementById(info.chart_id));
         chart.draw(data, options);
       }

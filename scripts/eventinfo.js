@@ -25,20 +25,25 @@ function getEventInfoFromParticipants (participants, info)
     for (var i = 0; i < participants.length; i++) 
     {
         var participant = participants[i];
+
         var result =  getNameInfo(participant.name);
         if (!result)
             continue;
 
         if (result.gender == 'female') {
-            if (result.ethnics == 'asian')
+            if (result.ethnics == 'asian') {
                  info.asian_female_count ++;
-            else
+                 console.log (info.asian_female_count + ": " + participant.name + " [ " + participant.link + " ]");
+            }
+            else {
                  info.non_asian_female_count ++;
+            }
         } else {
-             if (result.ethnics == 'asian')
+             if (result.ethnics == 'asian') {
                  info.asian_male_count ++;
-            else
+             } else {
                  info.non_asian_male_count ++;
+             }
         }
     }
 }
